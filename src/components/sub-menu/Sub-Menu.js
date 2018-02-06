@@ -45,22 +45,22 @@ class SubMenu extends Component {
     const insideMenuElement = isElementInside(event.target, ReactDOM.findDOMNode(this));
     const isClickOnMenuElement = event.target === element;
 
-    if (!insideMenuElement || !isClickOnMenuElement) {
+    if (!insideMenuElement && !isClickOnMenuElement) {
       this.removeItems();
     }
   }
 
   componentWillUnmount() {
-    document.removeEventListener("resize", this.removeItems);
-    document.removeEventListener("scroll", this.removeItems);
-    document.removeEventListener("click", this.documentClick);
+    window.removeEventListener("resize", this.removeItems);
+    window.removeEventListener("scroll", this.removeItems);
+    window.removeEventListener("click", this.documentClick);
   }
 
   componentDidMount() {
     const { element, items } = this.props;
-    document.addEventListener("resize", this.removeItems);
-    document.addEventListener("scroll", this.removeItems);
-    document.addEventListener("click", this.documentClick);
+    window.addEventListener("resize", this.removeItems);
+    window.addEventListener("scroll", this.removeItems);
+    window.addEventListener("click", this.documentClick);
 
     if (element && items) {
       this.setState({ ...getPositionByElement({ element }), ...{ items } });
