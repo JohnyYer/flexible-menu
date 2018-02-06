@@ -2,15 +2,18 @@
   "items": [
     {
       "id": 1,
-      "name": "Menu 1"
+      "name": "Menu 1",
+      "subItems": ["Item 1", "Item 2", "Item 3", "Item 4"]
     },
     {
       "id": 2,
-      "name": "Menu 2"
+      "name": "Menu 2",
+      "subItems": ["Item 1", "Item 2", "Item 3"]
     },
     {
       "id": 3,
-      "name": "Menu 3"
+      "name": "Menu 3",
+      "subItems": ["Item 1", "Item 2"]
     },
     {
       "id": 4,

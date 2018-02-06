@@ -1,3 +1,20 @@
 .sub-menu {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border: 1px solid black;
+}
+.sub-menu-item {
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
+.sub-menu-item-name {
+  cursor: pointer;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
