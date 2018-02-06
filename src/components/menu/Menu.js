@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./Menu.css";
 import { fetchMenu } from "../../resources";
 
-class App extends Component {
+class Menu extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -25,15 +25,22 @@ class App extends Component {
   }
 
   render() {
-    const { items } = this.state;
+    const { items, isFetching } = this.state;
     return (
       <div className="menu">
+        {isFetching ? <div className="menu-is-fetching">Loading...</div> : null}
         {items.map(({ name, id } = {}) => {
-          return <div key={id} className="menu-item">{name}</div>;
+          return (
+            <div key={id} className="menu-item">
+              <span className="menu-item-name" title={name}>
+                {name}
+              </span>
+            </div>
+          );
         })}
       </div>
     );
   }
 }
 
-export default App;
+export default Menu;
