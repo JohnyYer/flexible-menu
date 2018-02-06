@@ -3,7 +3,7 @@
     {
       "id": 1,
       "name": "Menu 1",
-      "subItems": ["Item 1", "Item 2", "Item 3", "Item 4"]
+      "subItems": ["Long Item 1", "Item 2", "Item 3", "Item 4", "Long Item 1", "Item 2", "Item 3", "Item 4"]
     },
     {
       "id": 2,
