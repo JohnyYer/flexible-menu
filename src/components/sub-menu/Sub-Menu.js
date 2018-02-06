@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import "./Sub-Menu.css";
+const modalRoot = document.getElementById("modal-root");
 
 const isElementInside = (startElement, rootElement) => {
   let parent = startElement.parentElement;
@@ -11,9 +12,32 @@ const isElementInside = (startElement, rootElement) => {
   return parent === rootElement ? true : isElementInside(parent, rootElement);
 };
 
-const getPositionByElement = ({ element } = {}) => {
-  const { top, height, left } = element.getBoundingClientRect();
-  return { top: top + height, left };
+const getPositionByElement = ({ element, rootElement } = {}) => {
+  const elementBoundingClientRect = element.getBoundingClientRect();
+  if (rootElement) {
+    const rootElementBoundingClientRect = rootElement.getBoundingClientRect();
+    const availableOnBottom = window.innerHeight >= rootElementBoundingClientRect.bottom;
+    if (availableOnBottom) {
+      return;
+    }
+    const availableOnTop = elementBoundingClientRect.top >= rootElementBoundingClientRect.height;
+    if (availableOnTop) {
+      return { top: elementBoundingClientRect.top - rootElementBoundingClientRect.height, left: elementBoundingClientRect.left };
+    }
+
+    const availableOnleft = elementBoundingClientRect.left >= rootElementBoundingClientRect.width;
+    if (availableOnleft) {
+      return { top: 0, left: elementBoundingClientRect.left-rootElementBoundingClientRect.width};
+    }
+
+    const availableOnRight = elementBoundingClientRect.right >= elementBoundingClientRect.width;
+    if (availableOnRight) {
+      return { top: 0, left: elementBoundingClientRect.left+elementBoundingClientRect.width};
+    }
+
+
+  }
+  return { top: elementBoundingClientRect.top + elementBoundingClientRect.height, left: elementBoundingClientRect.left };
 };
 
 class SubMenu extends Component {
@@ -24,7 +48,8 @@ class SubMenu extends Component {
       top: null,
       right: null,
       bottom: null,
-      items: null
+      items: null,
+      isSecondRender: false
     };
     this.removeItems = this.removeItems.bind(this);
     this.documentClick = this.documentClick.bind(this);
@@ -57,19 +82,26 @@ class SubMenu extends Component {
   }
 
   componentDidMount() {
-    const { element, items } = this.props;
     window.addEventListener("resize", this.removeItems);
     window.addEventListener("scroll", this.removeItems);
     window.addEventListener("click", this.documentClick);
+  }
 
-    if (element && items) {
-      this.setState({ ...getPositionByElement({ element }), ...{ items } });
+  componentDidUpdate() {
+    const { element } = this.props;
+    const { isSecondRender, items } = this.state;
+    if (!isSecondRender && items && element) {
+      this.setState({
+        ...getPositionByElement({ element, rootElement: ReactDOM.findDOMNode(this) }),
+        ...{ items },
+        ...{ isSecondRender: true }
+      });
     }
   }
 
   componentWillReceiveProps({ element, items } = {}) {
     if (element && items) {
-      this.setState({ ...getPositionByElement({ element }), ...{ items } });
+      this.setState({ ...getPositionByElement({ element }), ...{ items }, ...{ isSecondRender: false } });
     }
   }
 
@@ -88,7 +120,7 @@ class SubMenu extends Component {
             </div>
           ))}
         </div>,
-        document.getElementById("modal-root")
+        modalRoot
       )
     );
   }
